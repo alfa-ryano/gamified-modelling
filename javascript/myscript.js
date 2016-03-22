@@ -81,6 +81,7 @@ joint.shapes.html.ElementView = joint.dia.ElementView.extend({
             top: bbox.y
         });
     },
+
     removeBox: function (evt) {
         this.$box.remove();
     }
