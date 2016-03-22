@@ -1,0 +1,39 @@
+<head>
+    <link rel="stylesheet" href="css/joint.css"/>
+    <link rel="stylesheet" href="css/mystyle.css"/>
+    <script src="javascript/jquery.min.js"></script>
+    <script src="javascript/lodash.min.js"></script>
+    <script src="javascript/backbone-min.js"></script>
+    <script src="javascript/joint.js"></script>
+</head>
+<body>
+<div id="HeaderViewport" class="Viewport">
+    <span>
+        Level 11 - Instance Modelling: Create Graphical User Interface<br/>
+        (double click to change object's name)
+    </span>
+</div>
+<div id="CaseViewport" class="Viewport"></div>
+<div id="ObjectiveViewport" class="Viewport"></div>
+<div id="DrawingViewport" class="Viewport"></div>
+<div id="PaletteViewport" class="Viewport">
+    <div id="ObjectIcon" class="Icon" draggable="true">
+        <div id="NameObject" class="ContainerIcon">
+            <span class="ObjectNameText">object</span>
+        </div>
+        <div id="SlotObject" class="ContainerIcon"></div>
+        <div id="OperationObject" class="ContainerIcon"></div>
+    </div>
+    &nbsp; &nbsp; &nbsp;
+    <div id="LinkIcon" class="Icon" draggable="true">
+        <svg style='width: 100%; height: 100%;'>
+            <line x1="0" y1="100%" x2="100%" y2="0"
+                  style="stroke:black;stroke-width:1"/>
+        </svg>
+    </div>
+</div>
+<div id="ProgressViewport" class="Viewport"></div>
+<div id="FooterViewport" class="Viewport"></div>
+<script type="text/javascript" src="javascript/myscript.js"></script>
+</body>
+</html>
