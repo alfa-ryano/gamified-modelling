@@ -87,21 +87,18 @@ body, html {
     height: 90px;
     text-align: center;
     vertical-align: middle;
-    background-color: white;
-    border: thin solid black;
+    background-color: transparent;
+    border: thin none black;
     float: left;
-    margin-left: 3%;
+    margin-right: 3%;
 }
+
 
 #ObjectIcon {
 }
 
 .ContainerIcon {
     width: 100%;
-}
-
-#NameObject {
-    height: 30px;
 }
 
 .ObjectNameText {
@@ -111,14 +108,32 @@ body, html {
 
 }
 
-#SlotObject, #OperationObject {
+#NameObject {
+    height: 30px;
     border-top: thin solid black;
+    border-left: thin solid black;
+    border-right: thin solid black;
+    background-color: white;
+}
+
+#SlotObject {
+    border-top: thin solid black;
+    border-left: thin solid black;
+    border-right: thin solid black;
+    background-color: white;
+    height: 29px;
+}
+
+#OperationObject {
+    border: thin solid black;
+    background-color: white;
     height: 29px;
 }
 
 #LinkIcon {
     border: thin none white;
     background-color: transparent;
+    margin: 0 0 0 0;
 }
 
 

@@ -2,8 +2,18 @@
 <html>
 <head>
     <style>
-        #div1 {width:350px;height:70px;padding:10px;border:1px solid #aaaaaa;}
+        #div1 {
+            width: 350px;
+            height: 70px;
+            padding: 10px;
+            border: 1px solid #aaaaaa;
+        }
     </style>
+    <script src="http://code.jquery.com/jquery-1.7.2.min.js"></script>
+    <script src="http://code.jquery.com/ui/1.8.21/jquery-ui.min.js"></script>
+    <!--<script src="javascript/jquery.min.js"></script>-->
+    <!--<script src="javascript/jquery-ui.min.js"></script>-->
+    <script src="javascript/jquery.ui.touch-punch.min.js"></script>
     <script>
         function allowDrop(ev) {
             ev.preventDefault();
@@ -31,6 +41,17 @@
     XXXX <br/>
     XXXX
 </div>
+<br/>
+<div id="widget">
+    OOOO <br/>
+    OOOO <br/>
+    OOOO
+</div>
+
+<script>
+    $('#widget').draggable();
+</script>
+
 
 </body>
 </html>

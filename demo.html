@@ -2,6 +2,9 @@
     <link rel="stylesheet" href="css/joint.css"/>
     <link rel="stylesheet" href="css/mystyle.css"/>
     <script src="javascript/jquery.min.js"></script>
+    <script src="javascript/jquery-ui.min.js"></script>
+    <script src="javascript/jquery.ui.touch-punch.min.js"></script>
+    <script src="javascript/jquery.finger.min.js"></script>
     <script src="javascript/lodash.min.js"></script>
     <script src="javascript/backbone-min.js"></script>
     <script src="javascript/joint.js"></script>
@@ -10,7 +13,7 @@
 <div id="HeaderViewport" class="Viewport">
     <span>
         Level 11 - Instance Modelling: Create Graphical User Interface<br/>
-        (double click to change object's name)
+        (double click to change object's attributes, click outside the object to unfocus)
     </span>
 </div>
 <div id="CaseViewport" class="Viewport"></div>
@@ -24,7 +27,6 @@
         <div id="SlotObject" class="ContainerIcon"></div>
         <div id="OperationObject" class="ContainerIcon"></div>
     </div>
-    &nbsp; &nbsp; &nbsp;
     <div id="LinkIcon" class="Icon" draggable="true">
         <svg style='width: 100%; height: 100%;'>
             <line x1="0" y1="100%" x2="100%" y2="0"

@@ -51,6 +51,10 @@ joint.shapes.html.ElementView = joint.dia.ElementView.extend({
         joint.dia.ElementView.prototype.initialize.apply(this, arguments);
         this.$box = $(_.template(this.template)());
 
+        // Prevent paper from handling pointerdown.
+        this.$box.find('div input').on('dblclick', function (evt) {
+        });
+
         this.$box.find('input').on('change', _.bind(function (evt) {
             this.model.set('input', $(evt.target).val());
         }, this));
@@ -77,8 +81,8 @@ joint.shapes.html.ElementView = joint.dia.ElementView.extend({
         this.$box.css({
             width: bbox.width,
             height: bbox.height,
-            left: bbox.x,
-            top: bbox.y
+            left: bbox.x - 1,
+            top: bbox.y - 1
         });
     },
 
@@ -138,60 +142,127 @@ joint.shapes.html.ElementView = joint.dia.ElementView.extend({
 
 /*--Add Event Listener--*/
 
-document.getElementById("ObjectIcon").addEventListener("dragstart", function drag(event) {
-    event.dataTransfer.setData("text", event.target.id);
+$('#ObjectIcon').draggable({
+    opacity: 0.7, helper: "clone",
+    start: function (event) {
+    }
 });
 
-document.getElementById("LinkIcon").addEventListener("dragstart", function drag(event) {
-    event.dataTransfer.setData("text", event.target.id);
+$('#LinkIcon').draggable({
+    opacity: 0.7, helper: "clone",
+    start: function (event) {
+    }
 });
 
-document.getElementById("DrawingViewport").addEventListener("dragover", function allowDrop(event) {
-    event.preventDefault();
+$("#DrawingViewport").droppable({
+    drop: function (event, ui) {
+        var paperPoint = paper.clientToLocalPoint({x: event.clientX, y: event.clientY});
+
+        var elementId = ui.draggable.attr("id");
+
+        if (elementId == "ObjectIcon") {
+            var object = new joint.shapes.html.Element({
+                position: {x: paperPoint.x - ICON_WIDTH / 2, y: paperPoint.y - ICON_HEIGHT / 2},
+                size: {width: ICON_WIDTH, height: ICON_HEIGHT},
+                span: "object"
+            });
+            graph.addCell(object);
+        } else if (elementId == "LinkIcon") {
+
+            var link = new joint.dia.Link({
+                source: {x: paperPoint.x + ICON_WIDTH / 2, y: paperPoint.y - ICON_HEIGHT / 2},
+                target: {x: paperPoint.x - ICON_WIDTH / 2, y: paperPoint.y + ICON_HEIGHT / 2}
+            });
+            graph.addCell(link);
+        }
+    }
 });
-document.getElementById("DrawingViewport").addEventListener("drop", function drop(event) {
 
-    event.preventDefault();
-    var paperPoint = paper.clientToLocalPoint({x: event.clientX, y: event.clientY});
-    var elementId = event.dataTransfer.getData("text");
+//document.getElementById("ObjectIcon").addEventListener("dragstart", function drag(event) {
+//    event.dataTransfer.setData("text", event.target.id);
+//});
+//
+//document.getElementById("LinkIcon").addEventListener("dragstart", function drag(event) {
+//    event.dataTransfer.setData("text", event.target.id);
+//});
+//
+//document.getElementById("DrawingViewport").addEventListener("dragover", function allowDrop(event) {
+//    event.preventDefault();
+//});
+//document.getElementById("DrawingViewport").addEventListener("drop", function drop(event) {
+//
+//    event.preventDefault();
+//    var paperPoint = paper.clientToLocalPoint({x: event.clientX, y: event.clientY});
+//    var elementId = event.dataTransfer.getData("text");
+//
+//    if (elementId == "ObjectIcon") {
+//
+//        var object = new joint.shapes.html.Element({
+//            position: {x: paperPoint.x - ICON_WIDTH / 2, y: paperPoint.y - ICON_HEIGHT / 2},
+//            size: {width: ICON_WIDTH, height: ICON_HEIGHT},
+//            span: "object"
+//            //,
+//            //label: 'I am HTML',
+//            //select: 'one'
+//        });
+//
+//        //var object = new joint.shapes.basic.Rect({
+//        //    position: {x: 100, y: 30},
+//        //    size: {width: ICON_WIDTH, height: ICON_HEIGHT},
+//        //    attrs: {rect: {fill: 'white'}, text: {text: 'object', fill: 'black'}}
+//        //});
+//        graph.addCell(object);
+//
+//    } else if (elementId == "LinkIcon") {
+//
+//        var link = new joint.dia.Link({
+//            source: {x: paperPoint.x + ICON_WIDTH / 2, y: paperPoint.y - ICON_HEIGHT / 2},
+//            target: {x: paperPoint.x - ICON_WIDTH / 2, y: paperPoint.y + ICON_HEIGHT / 2}
+//        });
+//        graph.addCell(link);
+//
+//    }
+//});
 
-    if (elementId == "ObjectIcon") {
-
-        var object = new joint.shapes.html.Element({
-            position: {x: paperPoint.x - ICON_WIDTH / 2, y: paperPoint.y - ICON_HEIGHT / 2},
-            size: {width: ICON_WIDTH, height: ICON_HEIGHT},
-            span: "object"
-            //,
-            //label: 'I am HTML',
-            //select: 'one'
-        });
-
-        //var object = new joint.shapes.basic.Rect({
-        //    position: {x: 100, y: 30},
-        //    size: {width: ICON_WIDTH, height: ICON_HEIGHT},
-        //    attrs: {rect: {fill: 'white'}, text: {text: 'object', fill: 'black'}}
-        //});
-        graph.addCell(object);
-
-    } else if (elementId == "LinkIcon") {
-
-        var link = new joint.dia.Link({
-            source: {x: paperPoint.x + ICON_WIDTH / 2, y: paperPoint.y - ICON_HEIGHT / 2},
-            target: {x: paperPoint.x - ICON_WIDTH / 2, y: paperPoint.y + ICON_HEIGHT / 2}
-        });
-        graph.addCell(link);
-
+paper.on('blank:pointerclick', function(evt, x, y) {
+    if (document.activeElement instanceof HTMLInputElement){
+        document.activeElement.parentNode.parentNode.style.pointerEvents = 'none';
+        document.activeElement.blur();
+        var x = 2;
     }
 });
 
 paper.on('cell:pointerdblclick', function (cellView, evt, x, y) {
     var element = graph.get('cells').find(function (cell) {
-        if (cell instanceof joint.dia.Link) return false;
-        if (cell.id === cellView.model.id) {
-            var input = prompt("Object name: ", "object");
-            cellView.$box.find('input')[0].value = input;
-            return true;
-        }
-        return false;
-    });
+            if (cell instanceof joint.dia.Link) return false;
+            if (cell.id === cellView.model.id) {
+                cellView.$box.css({
+                        'pointer-events': function () {
+                            if (cellView.$box.css("pointer-events") == 'none') {
+                                return 'auto'
+                            }
+                        }
+                    }
+                );
+                //var input = prompt("Object name: ", "object");
+                //cellView.$box.find('input')[0].value = input;
+                return true;
+            }
+            return false;
+        })
+        ;
+})
+;
+
+
+//$("#ObjectIcon").on('doubletap', function(event) {
+$(".HtmlIcon").on('doubletap', function (event) {
+    try {
+        alert("B");
+        //var input = prompt("Object name: ", "object");
+        //var name = $(event.target).parent("#HtmlObjectIcon").find("HtmlObjectNameText")[0];
+        //name.value(input);
+    } catch (err) {
+        alert(err.message);
+    }
 });
