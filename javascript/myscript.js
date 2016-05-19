@@ -1,3 +1,9 @@
+//var imported = document.createElement('script');
+//imported.src = '/path/to/imported/script';
+//document.head.appendChild(imported);
+
+//-- PRESENTATION ----------------------------------------------------------------------------------
+
 var ICON_WIDTH = 100;
 var ICON_HEIGHT = 90;
 
@@ -77,7 +83,12 @@ joint.shapes.html.ElementView = joint.dia.ElementView.extend({
         // Set the position and dimension of the box so that it covers the JointJS element.
         var bbox = this.model.getBBox();
         // Example of updating the HTML with a data stored in the cell model.
-        this.$box.find('input').text(this.model.get('input'));
+
+        //this.$box.find('input').text(this.model.get('input'));
+        //this.$box.find('input').text(this.model.get('name'));
+        var temp = this.$box.find('.HtmlObjectNameText')[0];
+        temp.value = this.model.get('name');
+        //this.$box.find('HtmlObjectNameText').text(this.model.get('name'));
         this.$box.css({
             width: bbox.width,
             height: bbox.height,
@@ -89,55 +100,6 @@ joint.shapes.html.ElementView = joint.dia.ElementView.extend({
     removeBox: function (evt) {
         this.$box.remove();
     }
-
-    //initialize: function () {
-    //    _.bindAll(this, 'updateBox');
-    //    joint.dia.ElementView.prototype.initialize.apply(this, arguments);
-    //
-    //    this.$box = $(_.template(this.template)());
-    //    // Prevent paper from handling pointerdown.
-    //    this.$box.find('input,select').on('mousedown click', function (evt) {
-    //        evt.stopPropagation();
-    //    });
-    //    // This is an example of reacting on the input change and storing the input data in the cell model.
-    //    this.$box.find('input').on('change', _.bind(function (evt) {
-    //        this.model.set('input', $(evt.target).val());
-    //    }, this));
-    //    this.$box.find('select').on('change', _.bind(function (evt) {
-    //        this.model.set('select', $(evt.target).val());
-    //    }, this));
-    //    this.$box.find('select').val(this.model.get('select'));
-    //    this.$box.find('.delete').on('click', _.bind(this.model.remove, this.model));
-    //    // Update the box position whenever the underlying model changes.
-    //    this.model.on('change', this.updateBox, this);
-    //    // Remove the box when the model gets removed from the graph.
-    //    this.model.on('remove', this.removeBox, this);
-    //
-    //    this.updateBox();
-    //},
-    //render: function () {
-    //    joint.dia.ElementView.prototype.render.apply(this, arguments);
-    //    this.paper.$el.prepend(this.$box);
-    //    this.updateBox();
-    //    return this;
-    //},
-    //updateBox: function () {
-    //    // Set the position and dimension of the box so that it covers the JointJS element.
-    //    var bbox = this.model.getBBox();
-    //    // Example of updating the HTML with a data stored in the cell model.
-    //    this.$box.find('label').text(this.model.get('label'));
-    //    this.$box.find('span').text(this.model.get('select'));
-    //    this.$box.css({
-    //        width: bbox.width,
-    //        height: bbox.height,
-    //        left: bbox.x,
-    //        top: bbox.y,
-    //        transform: 'rotate(' + (this.model.get('angle') || 0) + 'deg)'
-    //    });
-    //},
-    //removeBox: function (evt) {
-    //    this.$box.remove();
-    //}
 });
 
 /*--Add Event Listener--*/
@@ -159,12 +121,15 @@ $("#DrawingViewport").droppable({
         var paperPoint = paper.clientToLocalPoint({x: event.clientX, y: event.clientY});
 
         var elementId = ui.draggable.attr("id");
+        var className = ui.draggable.attr("class");
+        var objectName = document.getElementById(elementId).innerHTML;
 
         if (elementId == "ObjectIcon") {
             var object = new joint.shapes.html.Element({
                 position: {x: paperPoint.x - ICON_WIDTH / 2, y: paperPoint.y - ICON_HEIGHT / 2},
                 size: {width: ICON_WIDTH, height: ICON_HEIGHT},
-                span: "object"
+                span: "object",
+                name: ""
             });
             graph.addCell(object);
         } else if (elementId == "LinkIcon") {
@@ -174,58 +139,26 @@ $("#DrawingViewport").droppable({
                 target: {x: paperPoint.x - ICON_WIDTH / 2, y: paperPoint.y + ICON_HEIGHT / 2}
             });
             graph.addCell(link);
+        } else if (elementId == "DraggableCaseItem1") {
+            var object = new joint.shapes.html.Element({
+                position: {x: paperPoint.x - ICON_WIDTH / 2, y: paperPoint.y - ICON_HEIGHT / 2},
+                size: {width: ICON_WIDTH, height: ICON_HEIGHT},
+                span: "object",
+                name: objectName
+            });
+            graph.addCell(object);
+
+            var level = game.levels[game.currentLevel];
+            level.addObject(objectName);
+            level.evaluateObjectives();
         }
+
+
     }
 });
 
-//document.getElementById("ObjectIcon").addEventListener("dragstart", function drag(event) {
-//    event.dataTransfer.setData("text", event.target.id);
-//});
-//
-//document.getElementById("LinkIcon").addEventListener("dragstart", function drag(event) {
-//    event.dataTransfer.setData("text", event.target.id);
-//});
-//
-//document.getElementById("DrawingViewport").addEventListener("dragover", function allowDrop(event) {
-//    event.preventDefault();
-//});
-//document.getElementById("DrawingViewport").addEventListener("drop", function drop(event) {
-//
-//    event.preventDefault();
-//    var paperPoint = paper.clientToLocalPoint({x: event.clientX, y: event.clientY});
-//    var elementId = event.dataTransfer.getData("text");
-//
-//    if (elementId == "ObjectIcon") {
-//
-//        var object = new joint.shapes.html.Element({
-//            position: {x: paperPoint.x - ICON_WIDTH / 2, y: paperPoint.y - ICON_HEIGHT / 2},
-//            size: {width: ICON_WIDTH, height: ICON_HEIGHT},
-//            span: "object"
-//            //,
-//            //label: 'I am HTML',
-//            //select: 'one'
-//        });
-//
-//        //var object = new joint.shapes.basic.Rect({
-//        //    position: {x: 100, y: 30},
-//        //    size: {width: ICON_WIDTH, height: ICON_HEIGHT},
-//        //    attrs: {rect: {fill: 'white'}, text: {text: 'object', fill: 'black'}}
-//        //});
-//        graph.addCell(object);
-//
-//    } else if (elementId == "LinkIcon") {
-//
-//        var link = new joint.dia.Link({
-//            source: {x: paperPoint.x + ICON_WIDTH / 2, y: paperPoint.y - ICON_HEIGHT / 2},
-//            target: {x: paperPoint.x - ICON_WIDTH / 2, y: paperPoint.y + ICON_HEIGHT / 2}
-//        });
-//        graph.addCell(link);
-//
-//    }
-//});
-
-paper.on('blank:pointerclick', function(evt, x, y) {
-    if (document.activeElement instanceof HTMLInputElement){
+paper.on('blank:pointerclick', function (evt, x, y) {
+    if (document.activeElement instanceof HTMLInputElement) {
         document.activeElement.parentNode.parentNode.style.pointerEvents = 'none';
         document.activeElement.blur();
         var x = 2;
@@ -266,3 +199,140 @@ $(".HtmlIcon").on('doubletap', function (event) {
         alert(err.message);
     }
 });
+
+//-- MODEL  ----------------------------------------------------------------------------------
+
+var MyObject = function (game, level, name) {
+    this.game = game;
+    this.level = level;
+    this.name = name;
+    this.getName = function(){
+        return this.name;
+    }
+}
+
+var Objective = function (game, level, description) {
+    this.level = level;
+    this.game = game;
+    this.description = description;
+    this.check = function(){alert("BBBB")};
+}
+
+var Level = function (game, name) {
+    this.name = name;
+    this.game = game;
+    this.objectives = new Array();
+    this.objects = new Array();
+    this.caseDescription = "";
+
+    this.points = 0;
+    this.timeElapsed = "00:00:00";
+
+    this.setInitialization = function (myInitialization) {
+        this.initialize = myInitialization;
+    }
+
+    this.setCaseDescription = function (caseDescription) {
+        this.caseDescription = caseDescription;
+    }
+
+    this.getCaseDescription = function () {
+        return this.caseDescription;
+    }
+
+
+    this.addObject = function (name) {
+        var myObject = new MyObject(this.game, this, name);
+        this.objects.push(myObject);
+    }
+
+    this.addObjective = function (objective) {
+        this.objectives.push(objective);
+    }
+
+    this.evaluateObjectives = function () {
+        var allTrue = false;
+        for (var i = 0; i < this.objectives.length; i++){
+            allTrue = this.objectives[i].check();
+        }
+        if (allTrue == true) {
+            alert("Level Complete");
+        }
+    }
+}
+
+var Stage = function () {
+    this.reset = function () {
+
+    }
+}
+
+var Game = function () {
+    this.stage = new Stage();
+    this.currentLevel = 0;
+
+    this.levels = new Array();
+
+    this.levels[0] = new Level(this, "Level 1");
+    this.levels[0].setCaseDescription(
+        "Create a <span id='DraggableCaseItem1' class='DraggableCaseItem' draggable='true' " +
+        "style='color:#0066cc'>button</span>!!!!!!"
+    );
+    var objectiveLevel01 = new Objective(this, this.levels[0],
+        "Create an button with name 'button'"
+    );
+    objectiveLevel01.check = function () {
+        //alert(this.level.name);
+        if (this.level != null && this.level.objects.length >= 1) {
+            for (var i = 0; i < this.level.objects.length;i++) {
+                //alert(this.level.objects[i].name);
+                if (this.level.objects[i].name == "button") {
+                    return true;
+                }
+            }
+        }
+        return false;
+    }.bind(objectiveLevel01);
+    this.levels[0].addObjective(objectiveLevel01);
+
+    this.levels[1] = new Level(this, "Level 2");
+    this.levels[1].setCaseDescription(
+        "Create two buttons:<brr/> <span id='DraggableCaseItem1' class='DraggableCaseItem' draggable='true' " +
+        "style='color:#0066cc'>button 1</span> and <span id='DraggableCaseItem2' class='DraggableCaseItem' draggable='true' " +
+        "style='color:#0066cc'>button 2</span>"
+    );
+    var objectiveLevel02 = new Objective(this, this.levels[1],
+        "Create two objects named 'button 1' and 'button 2'!",
+        function () {
+            if (this.levels != null && this.levels[1].objects.size >= 2) {
+                var countTrue = 0;
+                for (var item in this.levels[1].objects) {
+                    if (item.getName() == "button 1" || item.getName() == "button 2") {
+                        countTrue += 1;
+                    }
+                    if (countTrue >= 2) {
+                        true;
+                    }
+                }
+            }
+        });
+    this.levels[1].addObjective(objectiveLevel02);
+
+    this.run = function () {
+        //Level 1
+        document.getElementById("Instruction").innerHTML = this.levels[0].caseDescription;
+        $('#DraggableCaseItem1').draggable({
+            opacity: 0.7, helper: "clone",
+            start: function (event) {
+            }
+        });
+    }
+}
+
+// MAIN ------------------------------------
+try {
+    var game = new Game();
+    game.run();
+} catch (error) {
+    alert(error.message);
+}

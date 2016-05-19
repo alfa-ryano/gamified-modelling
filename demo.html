@@ -11,15 +11,27 @@
 </head>
 <body>
 <div id="HeaderViewport" class="Viewport">
-    <span>
-        Level 11 - Instance Modelling: Create Graphical User Interface<br/>
-        (double click to change object's attributes, click outside the object to unfocus)
+    <span id="Title">
+        Level 01 - Object Modelling: Create a Single Object<br/>
+        (drag and drop the item from the palette or the colored texts into the drawing area)
     </span>
 </div>
-<div id="CaseViewport" class="Viewport"></div>
-<div id="ObjectiveViewport" class="Viewport"></div>
+<div id="CaseViewport" class="Viewport">
+    <div>CASES:</div>
+    <div id="Instruction">
+        <!--Create a <span id="DraggableCaseItem1" class="DraggableCaseItem" draggable="true"
+                       style="color:#0066cc">button</span>!-->
+    </div>
+</div>
+<div id="ObjectiveViewport" class="Viewport">
+    <div>OBJECTIVES:</div>
+    <ol id="Objective" style="padding-left: 10%">
+        <li id="ObjectiveItem1" class="ObjectiveItem">Create one object with name 'button'</li>
+    </ol>
+</div>
 <div id="DrawingViewport" class="Viewport"></div>
 <div id="PaletteViewport" class="Viewport">
+    <div>PALETTE:</div>
     <div id="ObjectIcon" class="Icon" draggable="true">
         <div id="NameObject" class="ContainerIcon">
             <span class="ObjectNameText">object</span>
