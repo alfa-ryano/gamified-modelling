@@ -168,9 +168,9 @@ $("#DrawingViewport").droppable({
         //    });
         //    graph.addCell(object);
         //
-        //    var level = game.levels[game.currentLevel];
-        //    level.addObject(objectName);
-        //    //level.evaluateObjectives();
+        var level = game.levels[game.currentLevel];
+        //level.addObject(objectName);
+        level.evaluateObjectives();
         //}
 
 
