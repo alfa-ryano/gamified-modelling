@@ -31,7 +31,7 @@ joint.shapes.html.ElementView = joint.dia.ElementView.extend({
         '<div class="HtmlIcon">',
         '<button class="delete">x</button>',
         '<div id="HtmlNameObject" class="HtmlContainerIcon">',
-        '<input class="HtmlObjectNameText" type="text" value="object" />',
+        '<input class="HtmlObjectNameText" type="text" value="" />',
         '</div>',
         '<div id="HtmlSlotObject" class="HtmlContainerIcon">',
         '<input class="HtmlObjectSlotText" type="text" value="" />',
@@ -84,8 +84,7 @@ joint.shapes.html.ElementView = joint.dia.ElementView.extend({
         //this.$box.find('input').text(this.model.get('input'));
         //this.$box.find('input').text(this.model.get('name'));
         this.$box.find('.HtmlObjectNameText')[0].value = this.model.get('name');
-        this.$box[0].id = this.model.get('identity');
-
+        this.$box.find('.HtmlObjectNameText')[0].id = this.model.get('identity');
         //this.$box.find('HtmlObjectNameText').text(this.model.get('name'));
         this.$box.css({
             width: bbox.width,
@@ -122,31 +121,45 @@ $("#DrawingViewport").droppable({
         var objectName = document.getElementById(elementId).innerHTML;
 
         if (elementId == "ObjectIcon") {
+
+            var objectName = "";
+            var objectId = "element-" + (++counter);
+            var objectModel = game.levels[game.currentLevel].addObject("", objectId);
+
             var object = new joint.shapes.html.Element({
                 position: {x: paperPoint.x - ICON_WIDTH / 2, y: paperPoint.y - ICON_HEIGHT / 2},
                 size: {width: ICON_WIDTH, height: ICON_HEIGHT},
                 span: "object",
-                name: "object",
-                identity: "element-" + (++counter)
+                name: objectName,
+                identity: objectId,
+                model: objectModel
             });
             graph.addCell(object);
 
             $(".HtmlIcon").droppable({
                 drop: function (event, ui) {
                     //var elementId = $(event.target).attr('id');
+                    var name;
                     var source = $(event.toElement)[0];
-                    objectName = source.innerHTML;
+                    name = source.innerHTML;
                     var target = $(event.target).find(".HtmlObjectNameText")[0];
-                    target.value = objectName;
+                    target.value = name;
 
+                    //Perubahan data di layar dan di model
                     var element = graph.get('cells').find(function (cell) {
                         if (cell instanceof joint.dia.Link) return false;
                         if (cell instanceof joint.shapes.html.Element) {
-                            cell.attributes.name = objectName;
-                            return true;
+                            if (target.id == cell.attributes.identity) {
+                                cell.attributes.name = name;
+                                cell.attributes.model.objectName = name;
+                                return true;
+                            }
                         }
                         return false;
                     });
+
+                    game.levels[game.currentLevel].evaluateObjectives();
+
 
                 }
             });
@@ -168,9 +181,6 @@ $("#DrawingViewport").droppable({
         //    });
         //    graph.addCell(object);
         //
-        var level = game.levels[game.currentLevel];
-        //level.addObject(objectName);
-        level.evaluateObjectives();
         //}
 
 
@@ -239,3 +249,28 @@ $(".HtmlIcon").on('doubletap', function (event) {
     }
 });
 
+$(function () {
+    $("#dialog-confirm").dialog({
+        resizable: false,
+        height: 140,
+        modal: true,
+        buttons: {
+            "Delete all items": function () {
+                $(this).dialog("close");
+            },
+            Cancel: function () {
+                $(this).dialog("close");
+            }
+        }
+    });
+});
+
+
+function closeDialog() {
+    document.getElementById("dialog-background").style.visibility = "collapse";
+    document.getElementById("dialog-next").style.visibility = "collapse";
+}
+function showDialog() {
+    document.getElementById("dialog-background").style.visibility = "visible";
+    document.getElementById("dialog-next").style.visibility = "visible";
+}

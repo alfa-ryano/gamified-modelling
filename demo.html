@@ -1,6 +1,8 @@
 <head>
     <link rel="stylesheet" href="css/joint.css"/>
     <link rel="stylesheet" href="css/mystyle.css"/>
+    <!-- <link rel="stylesheet" href="css/jquery/base.css"/>
+    <link rel="stylesheet" href="css/jquery/style.css"/> -->
     <script src="javascript/jquery.min.js"></script>
     <script src="javascript/jquery-ui.min.js"></script>
     <script src="javascript/jquery.ui.touch-punch.min.js"></script>
@@ -12,8 +14,8 @@
 <body>
 <div id="HeaderViewport" class="Viewport">
     <span id="Title">
-        Level 01 - Object Modelling: Create a Single Object<br/>
-        (drag and drop the item from the palette or the colored texts into the drawing area)
+        Level 01 - Object Modelling: Create a Single Object
+        <!--(<br/>drag and drop the item from the palette or the colored texts into the drawing area)-->
     </span>
 </div>
 <div id="CaseViewport" class="Viewport">
@@ -34,7 +36,7 @@
     <div>PALETTE:</div>
     <div id="ObjectIcon" class="Icon" draggable="true">
         <div id="NameObject" class="ContainerIcon">
-            <span class="ObjectNameText">object</span>
+            <span class="ObjectNameText"></span>
         </div>
         <div id="SlotObject" class="ContainerIcon"></div>
         <div id="OperationObject" class="ContainerIcon"></div>
@@ -47,7 +49,26 @@
     </div>
 </div>
 <div id="ProgressViewport" class="Viewport"></div>
-<div id="FooterViewport" class="Viewport" onclick="console.log('aaa')"></div>
+<div id="FooterViewport" class="Viewport" onclick="console.log('aaa')">
+
+</div>
+
+<div id="dialog-background" class="filler">
+</div>
+<div id="dialog-next" class="dialog">
+    <p>
+        CONGRATULATIONS!
+    </p>
+    <br/>
+    <p>You have completed the level! <br/>
+        Press 'Next' to go to the next level!
+    </p>
+    <br/>
+    <button class="dialog-button" onclick="closeDialog()">Continue</button>
+    <button class="dialog-button" onclick="game.replay()">Replay</button>
+    <button class="dialog-button" onclick="game.nextLevel()">Next</button>
+</div>
+
 <script type="text/javascript" src="javascript/gamified.mde/model.js"></script>
 <script type="text/javascript" src="javascript/gamified.mde/presentation.js"></script>
 <script type="text/javascript" src="javascript/gamified.mde/main.js"></script>
