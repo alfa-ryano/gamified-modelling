@@ -60,19 +60,17 @@ var Level = function (game, levelName) {
             }
         }
         if (trueCounter == this.objectives.length) {
-            showDialog();
+            game.stage.showDialog();
         }
     }
 }
 
-var Stage = function () {
-    this.reset = function () {
 
-    }
-}
 
 var Game = function () {
-    this.stage = new Stage();
+
+    this.stage = new Stage(this);
+
     //SET THE DEFAULT LEVEL 0 = level 1, 1 = level 2
     this.currentLevel = 0;
 
@@ -200,32 +198,17 @@ var Game = function () {
     }
 
     this.replay = function () {
-        closeDialog();
-        graph.clear();
-        game.levels[this.currentLevel].initialize();
-    }
+        this.stage.closeDialog();
+        this.stage.graph.clear();
+        this.levels[game.currentLevel].initialize();
+    }.bind(this);
+    document.getElementById("button-replay").onclick = this.replay;
 
     this.nextLevel = function () {
-        closeDialog();
-        graph.clear();
+        this.stage.closeDialog();
+        this.stage.graph.clear();
         this.currentLevel += 1;
-        game.levels[this.currentLevel].initialize();
-    }
+        this.levels[game.currentLevel].initialize();
+    }.bind(this);
+    document.getElementById("button-next").onclick = this.nextLevel;
 }
-
-function click(x, y) {
-    var ev = document.createEvent("MouseEvent");
-    var el = document.elementFromPoint(x, y);
-    ev.initMouseEvent(
-        "click",
-        true /* bubble */, true /* cancelable */,
-        window, null,
-        x, y, 0, 0, /* coordinates */
-        false, false, false, false, /* modifier keys */
-        0 /*left*/, null
-    );
-    el.dispatchEvent(ev);
-}
-
-
-
