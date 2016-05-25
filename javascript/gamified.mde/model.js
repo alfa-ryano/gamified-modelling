@@ -136,7 +136,7 @@ var Game = function () {
     );
 
     var objectiveLevel02_1 = new Objective(this, this.levels[1], "Objective-1",
-        "Create and objects named 'button 1'!");
+        "Create an object named 'button 1'!");
     objectiveLevel02_1.check = function () {
         if (this.level != null && this.level.objects.length >= 1) {
             for (var i = 0; i < this.level.objects.length; i++) {
@@ -150,7 +150,7 @@ var Game = function () {
     this.levels[1].addObjective(objectiveLevel02_1);
 
     var objectiveLevel02_2 = new Objective(this, this.levels[1], "Objective-2",
-        "Create and objects named 'button 2'!");
+        "Create an object named 'button 2'!");
     objectiveLevel02_2.check = function () {
         if (this.level != null && this.level.objects.length >= 1) {
             for (var i = 0; i < this.level.objects.length; i++) {

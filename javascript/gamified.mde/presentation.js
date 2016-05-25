@@ -1,4 +1,8 @@
 //-- PRESENTATION ----------------------------------------------------------------------------------
+function Stage () {
+    
+}
+
 
 var ICON_WIDTH = 100;
 var ICON_HEIGHT = 90;
@@ -40,13 +44,6 @@ joint.shapes.html.ElementView = joint.dia.ElementView.extend({
         '<input class="HtmlObjectOperationText" type="text" value="" />',
         '</div>',
         '</div>'
-        //'<div class="html-element">',
-        //'<button class="delete">x</button>',
-        //'<label></label>',
-        //'<span></span>', '<br/>',
-        //'<select><option>--</option><option>one</option><option>two</option></select>',
-        //'<input type="text" value="I\'m HTML input" />',
-        //'</div>'
     ].join(''),
 
     initialize: function () {
@@ -247,22 +244,6 @@ $(".HtmlIcon").on('doubletap', function (event) {
     } catch (err) {
         alert(err.message);
     }
-});
-
-$(function () {
-    $("#dialog-confirm").dialog({
-        resizable: false,
-        height: 140,
-        modal: true,
-        buttons: {
-            "Delete all items": function () {
-                $(this).dialog("close");
-            },
-            Cancel: function () {
-                $(this).dialog("close");
-            }
-        }
-    });
 });
 
 
